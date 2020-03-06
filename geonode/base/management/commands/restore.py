@@ -43,6 +43,8 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand, CommandError
 
 
+# SOME temporary comment
+
 class Command(BaseCommand):
 
     help = 'Restore the GeoNode application data'
