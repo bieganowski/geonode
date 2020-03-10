@@ -1,3 +1,5 @@
+{% load static from staticfiles %}
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -35,8 +37,8 @@
   <body>
     <div class="container">
       <div class="center">
-      <img src="static/geonode/img/logo.png">
-      <p><b>Your instance is currently in Read-Only mode.</b><br><br>Performing any changes is disallowed on this instace.</p>
+        <img src="{% static 'geonode/img/logo.png' %}">
+        <p><b>Your instance is currently in Read-Only mode.</b><br><br>Performing any changes is disallowed on this instace.</p>
       </div>
     </div>
   </body>
