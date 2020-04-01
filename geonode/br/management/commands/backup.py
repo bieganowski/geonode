@@ -181,7 +181,15 @@ class Command(BaseCommand):
                 if not os.path.exists(static_files_folders):
                     os.makedirs(static_files_folders)
 
+                print('--------------- STATIC_DIRS --------------------')
                 for static_files_folder in static_folders:
+
+                    # skip dumping of static files of apps not located under PROJECT_ROOT path
+                    # (check to prevent saving files from site-packages in project-template based GeoNode projects)
+                    if not static_files_folder.startswith(settings.PROJECT_ROOT):
+                        print(f"Skipping static directory: {static_files_folder}. It's not located under PROJECT_ROOT path.")
+                        continue
+
                     static_folder = os.path.join(static_files_folders,
                                                  os.path.basename(os.path.normpath(static_files_folder)))
                     if not os.path.exists(static_folder):
@@ -189,6 +197,7 @@ class Command(BaseCommand):
 
                     copy_tree(static_files_folder, static_folder)
                     print("Saved Static Files from '"+static_files_folder+"'.")
+                print('+++++++++++++++ END: STATIC_DIRS +++++++++++++++')
 
                 # Store Template Folders
                 template_folders = []
@@ -203,7 +212,15 @@ class Command(BaseCommand):
                 if not os.path.exists(template_files_folders):
                     os.makedirs(template_files_folders)
 
+                print('--------------- TEMPLATE_DIRS --------------------')
                 for template_files_folder in template_folders:
+
+                    # skip dumping of template files of apps not located under PROJECT_ROOT path
+                    # (check to prevent saving files from site-packages in project-template based GeoNode projects)
+                    if not template_files_folder.startswith(settings.PROJECT_ROOT):
+                        print(f"Skipping template directory: {template_files_folder}. It's not located under PROJECT_ROOT path.")
+                        continue
+
                     template_folder = os.path.join(template_files_folders,
                                                    os.path.basename(os.path.normpath(template_files_folder)))
                     if not os.path.exists(template_folder):
@@ -211,6 +228,7 @@ class Command(BaseCommand):
 
                     copy_tree(template_files_folder, template_folder)
                     print("Saved Template Files from '"+template_files_folder+"'.")
+                print('+++++++++++++++ END: TEMPLATES_DIRS +++++++++++++++')
 
                 # Store Locale Folders
                 locale_folders = settings.LOCALE_PATHS
@@ -218,7 +236,15 @@ class Command(BaseCommand):
                 if not os.path.exists(locale_files_folders):
                     os.makedirs(locale_files_folders)
 
+                print('--------------- LOCALE_DIRS --------------------')
                 for locale_files_folder in locale_folders:
+
+                    # skip dumping of locale files of apps not located under PROJECT_ROOT path
+                    # (check to prevent saving files from site-packages in project-template based GeoNode projects)
+                    if not locale_files_folder.startswith(settings.PROJECT_ROOT):
+                        print(f"Skipping locale directory: {locale_files_folder}. It's not located under PROJECT_ROOT path.")
+                        continue
+
                     locale_folder = os.path.join(locale_files_folders,
                                                  os.path.basename(os.path.normpath(locale_files_folder)))
                     if not os.path.exists(locale_folder):
@@ -226,6 +252,7 @@ class Command(BaseCommand):
 
                     copy_tree(locale_files_folder, locale_folder)
                     print("Saved Locale Files from '"+locale_files_folder+"'.")
+                print('+++++++++++++++ END: LOCALE_DIRS +++++++++++++++')
 
                 # Create Final ZIP Archive
                 backup_archive = os.path.join(backup_dir, dir_time_suffix+'.zip')

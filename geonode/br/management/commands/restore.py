@@ -227,7 +227,9 @@ class Command(BaseCommand):
             if not skip_geoserver:
 
                 try:
+                    print('--------------- RESTORE GEOSERVER BACKUP ---------------')
                     self.restore_geoserver_backup(settings, target_folder)
+                    print('+++++++++++++++ END: RESTORE GEOSERVER BACKUP +++++++++++++++')
                     self.restore_geoserver_raster_data(config, settings, target_folder)
                     self.restore_geoserver_vector_data(config, settings, target_folder)
                     print("Restoring geoserver external resources")
@@ -535,17 +537,25 @@ class Command(BaseCommand):
         error_backup = 'Could not successfully restore GeoServer ' + \
                        'catalog [{}rest/br/restore/]: {} - {}'
 
+        print(f'rest/br/restore response code: {r.status_code}')
+
         if r.status_code in (200, 201, 406):
             try:
                 r = requests.get(url + 'rest/br/restore.json',
                                  auth=HTTPBasicAuth(user, passwd),
                                  timeout=10)
+
+                print(f'restore/br/restore.json response code {r.status_code}')
+
                 if (r.status_code == 200):
                     gs_backup = r.json()
                     _url = gs_backup['restores']['restore'][len(gs_backup['restores']['restore']) - 1]['href']
                     r = requests.get(_url,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
+
+                    print(f'{_url} response code {r.status_code}')
+
                     if (r.status_code == 200):
                         gs_backup = r.json()
 
@@ -558,6 +568,9 @@ class Command(BaseCommand):
             r = requests.get(url + 'rest/br/restore/' + str(gs_bk_exec_id) + '.json',
                              auth=HTTPBasicAuth(user, passwd),
                              timeout=10)
+
+            print(f'restore/br/restore/{str(gs_bk_exec_id)} response code {r.status_code}')
+
             if (r.status_code == 200):
                 gs_bk_exec_status = gs_backup['restore']['execution']['status']
                 gs_bk_exec_progress = gs_backup['restore']['execution']['progress']
@@ -568,6 +581,9 @@ class Command(BaseCommand):
                     r = requests.get(url + 'rest/br/restore/' + str(gs_bk_exec_id) + '.json',
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
+
+                    print(f'restore/br/restore/{str(gs_bk_exec_id)}.json response code {r.status_code}')
+
                     if (r.status_code == 200):
 
                         try:
@@ -583,6 +599,11 @@ class Command(BaseCommand):
                         raise ValueError(error_backup.format(url, r.status_code, r.text))
             else:
                 raise ValueError(error_backup.format(url, r.status_code, r.text))
+
+        else:
+            print('ERROR: response code not in [200, 201, 406]')
+            print(f'response content:\n{r.content}')
+            print('\n++++++++++++++ response content end ++++++++++++++')
 
     def restore_geoserver_raster_data(self, config, settings, target_folder):
         if (config.gs_data_dir):
