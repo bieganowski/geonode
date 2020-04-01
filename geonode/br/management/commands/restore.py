@@ -331,6 +331,14 @@ class Command(BaseCommand):
 
                     # Restore Static Folders
                     for static_files_folder in static_folders:
+
+                        # skip restoration of static files of apps not located under LOCAL_ROOT path
+                        # (check to prevent overriding files from site-packages in project-template based GeoNode projects)
+                        if getattr(settings, 'LOCAL_ROOT', None) and not static_files_folder.startswith(settings.LOCAL_ROOT):
+                            print(
+                                f"Skipping static directory: {static_files_folder}. It's not located under LOCAL_ROOT path: {settings.LOCAL_ROOT}.")
+                            continue
+
                         try:
                             shutil.rmtree(static_files_folder)
                         except Exception:
@@ -347,6 +355,14 @@ class Command(BaseCommand):
 
                     # Restore Template Folders
                     for template_files_folder in template_folders:
+
+                        # skip restoration of template files of apps not located under LOCAL_ROOT path
+                        # (check to prevent overriding files from site-packages in project-template based GeoNode projects)
+                        if getattr(settings, 'LOCAL_ROOT', None) and not template_files_folder.startswith(settings.LOCAL_ROOT):
+                            print(
+                                f"Skipping template directory: {template_files_folder}. It's not located under LOCAL_ROOT path: {settings.LOCAL_ROOT}.")
+                            continue
+
                         try:
                             shutil.rmtree(template_files_folder)
                         except Exception:
@@ -363,6 +379,14 @@ class Command(BaseCommand):
 
                     # Restore Locale Folders
                     for locale_files_folder in locale_folders:
+
+                        # skip restoration of locale files of apps not located under LOCAL_ROOT path
+                        # (check to prevent overriding files from site-packages in project-template based GeoNode projects)
+                        if getattr(settings, 'LOCAL_ROOT', None) and not locale_files_folder.startswith(settings.LOCAL_ROOT):
+                            print(
+                                f"Skipping locale directory: {locale_files_folder}. It's not located under LOCAL_ROOT path: {settings.LOCAL_ROOT}.")
+                            continue
+
                         try:
                             shutil.rmtree(locale_files_folder)
                         except Exception:
