@@ -184,10 +184,10 @@ class Command(BaseCommand):
                 print('--------------- STATIC_DIRS --------------------')
                 for static_files_folder in static_folders:
 
-                    # skip dumping of static files of apps not located under PROJECT_ROOT path
+                    # skip dumping of static files of apps not located under LOCAL_ROOT path
                     # (check to prevent saving files from site-packages in project-template based GeoNode projects)
-                    if not static_files_folder.startswith(settings.PROJECT_ROOT):
-                        print(f"Skipping static directory: {static_files_folder}. It's not located under PROJECT_ROOT path: {settings.PROJECT_ROOT}.")
+                    if getattr(settings, 'LOCAL_ROOT', None) and not static_files_folder.startswith(settings.LOCAL_ROOT):
+                        print(f"Skipping static directory: {static_files_folder}. It's not located under LOCAL_ROOT path: {settings.LOCAL_ROOT}.")
                         continue
 
                     static_folder = os.path.join(static_files_folders,
@@ -215,10 +215,10 @@ class Command(BaseCommand):
                 print('--------------- TEMPLATE_DIRS --------------------')
                 for template_files_folder in template_folders:
 
-                    # skip dumping of template files of apps not located under PROJECT_ROOT path
+                    # skip dumping of template files of apps not located under LOCAL_ROOT path
                     # (check to prevent saving files from site-packages in project-template based GeoNode projects)
-                    if not template_files_folder.startswith(settings.PROJECT_ROOT):
-                        print(f"Skipping template directory: {template_files_folder}. It's not located under PROJECT_ROOT path: {settings.PROJECT_ROOT}.")
+                    if getattr(settings, 'LOCAL_ROOT', None) and not template_files_folder.startswith(settings.LOCAL_ROOT):
+                        print(f"Skipping template directory: {template_files_folder}. It's not located under LOCAL_ROOT path: {settings.LOCAL_ROOT}.")
                         continue
 
                     template_folder = os.path.join(template_files_folders,
@@ -239,10 +239,10 @@ class Command(BaseCommand):
                 print('--------------- LOCALE_DIRS --------------------')
                 for locale_files_folder in locale_folders:
 
-                    # skip dumping of locale files of apps not located under PROJECT_ROOT path
+                    # skip dumping of locale files of apps not located under LOCAL_ROOT path
                     # (check to prevent saving files from site-packages in project-template based GeoNode projects)
-                    if not locale_files_folder.startswith(settings.PROJECT_ROOT):
-                        print(f"Skipping locale directory: {locale_files_folder}. It's not located under PROJECT_ROOT path: {settings.PROJECT_ROOT}.")
+                    if getattr(settings, 'LOCAL_ROOT', None) and not locale_files_folder.startswith(settings.LOCAL_ROOT):
+                        print(f"Skipping locale directory: {locale_files_folder}. It's not located under LOCAL_ROOT path: {settings.LOCAL_ROOT}.")
                         continue
 
                     locale_folder = os.path.join(locale_files_folders,
