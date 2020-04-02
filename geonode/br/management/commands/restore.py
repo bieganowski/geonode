@@ -564,7 +564,9 @@ class Command(BaseCommand):
         error_backup = 'Could not successfully restore GeoServer ' + \
                        'catalog [{}rest/br/restore/]: {} - {}'
 
+        print('=============')
         print(f'rest/br/restore response code: {r.status_code}')
+        print(f'response content:\n{r.content}')
 
         if r.status_code in (200, 201, 406):
             try:
@@ -572,7 +574,9 @@ class Command(BaseCommand):
                                  auth=HTTPBasicAuth(user, passwd),
                                  timeout=10)
 
+                print('=============')
                 print(f'restore/br/restore.json response code {r.status_code}')
+                print(f'response content:\n{r.content}')
 
                 if (r.status_code == 200):
                     gs_backup = r.json()
@@ -581,7 +585,9 @@ class Command(BaseCommand):
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
 
+                    print('=============')
                     print(f'{_url} response code {r.status_code}')
+                    print(f'response content:\n{r.content}')
 
                     if (r.status_code == 200):
                         gs_backup = r.json()
@@ -596,7 +602,9 @@ class Command(BaseCommand):
                              auth=HTTPBasicAuth(user, passwd),
                              timeout=10)
 
+            print('=============')
             print(f'restore/br/restore/{str(gs_bk_exec_id)} response code {r.status_code}')
+            print(f'response content:\n{r.content}')
 
             if (r.status_code == 200):
                 gs_bk_exec_status = gs_backup['restore']['execution']['status']
@@ -609,7 +617,9 @@ class Command(BaseCommand):
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
 
+                    print('=============')
                     print(f'restore/br/restore/{str(gs_bk_exec_id)}.json response code {r.status_code}')
+                    print(f'response content:\n{r.content}')
 
                     if (r.status_code == 200):
 
