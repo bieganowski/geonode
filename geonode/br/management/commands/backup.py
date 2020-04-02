@@ -289,12 +289,14 @@ class Command(BaseCommand):
         if r.status_code in (200, 201, 406):
             try:
                 r = requests.get(url + 'rest/br/backup.json',
+                                 headers=headers,
                                  auth=HTTPBasicAuth(user, passwd),
                                  timeout=10)
                 if (r.status_code == 200):
                     gs_backup = r.json()
                     _url = gs_backup['backups']['backup'][len(gs_backup['backups']['backup']) - 1]['href']
                     r = requests.get(_url,
+                                     headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
                     if (r.status_code == 200):
@@ -307,6 +309,7 @@ class Command(BaseCommand):
 
             gs_bk_exec_id = gs_backup['backup']['execution']['id']
             r = requests.get(url + 'rest/br/backup/' + str(gs_bk_exec_id) + '.json',
+                             headers=headers,
                              auth=HTTPBasicAuth(user, passwd),
                              timeout=10)
             if (r.status_code == 200):
@@ -317,6 +320,7 @@ class Command(BaseCommand):
                     if (gs_bk_exec_progress != gs_bk_exec_progress_updated):
                         gs_bk_exec_progress_updated = gs_bk_exec_progress
                     r = requests.get(url + 'rest/br/backup/' + str(gs_bk_exec_id) + '.json',
+                                     headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
                     if (r.status_code == 200):

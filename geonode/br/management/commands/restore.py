@@ -555,7 +555,10 @@ class Command(BaseCommand):
 
         # Best Effort Restore: 'options': {'option': ['BK_BEST_EFFORT=true']}
         data = {'restore': {'archiveFile': geoserver_bk_file, 'options': {}}}
-        headers = {'Content-type': 'application/json'}
+        headers = {
+            'Accept': 'application/json',
+            'Content-type': 'application/json'
+        }
         r = requests.post(url + 'rest/br/restore/', data=json.dumps(data),
                           headers=headers, auth=HTTPBasicAuth(user, passwd))
         error_backup = 'Could not successfully restore GeoServer ' + \
@@ -564,6 +567,7 @@ class Command(BaseCommand):
         if r.status_code in (200, 201, 406):
             try:
                 r = requests.get(url + 'rest/br/restore.json',
+                                 headers=headers,
                                  auth=HTTPBasicAuth(user, passwd),
                                  timeout=10)
 
@@ -571,6 +575,7 @@ class Command(BaseCommand):
                     gs_backup = r.json()
                     _url = gs_backup['restores']['restore'][len(gs_backup['restores']['restore']) - 1]['href']
                     r = requests.get(_url,
+                                     headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
 
@@ -584,6 +589,7 @@ class Command(BaseCommand):
 
             gs_bk_exec_id = gs_backup['restore']['execution']['id']
             r = requests.get(url + 'rest/br/restore/' + str(gs_bk_exec_id) + '.json',
+                             headers=headers,
                              auth=HTTPBasicAuth(user, passwd),
                              timeout=10)
 
@@ -595,6 +601,7 @@ class Command(BaseCommand):
                     if (gs_bk_exec_progress != gs_bk_exec_progress_updated):
                         gs_bk_exec_progress_updated = gs_bk_exec_progress
                     r = requests.get(url + 'rest/br/restore/' + str(gs_bk_exec_id) + '.json',
+                                     headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
 
