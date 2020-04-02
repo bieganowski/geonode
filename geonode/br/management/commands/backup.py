@@ -279,7 +279,7 @@ class Command(BaseCommand):
         data = {'backup': {'archiveFile': geoserver_bk_file, 'overwrite': 'true',
                            'options': {'option': ['BK_BEST_EFFORT=true']}}}
         headers = {
-            'Accept': 'text/plain',
+            'Accept': 'application/json',
             'Content-type': 'application/json'
         }
         r = requests.post(url + 'rest/br/backup/', data=json.dumps(data),
