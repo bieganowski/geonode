@@ -181,7 +181,6 @@ class Command(BaseCommand):
                 if not os.path.exists(static_files_folders):
                     os.makedirs(static_files_folders)
 
-                print('--------------- STATIC_DIRS --------------------')
                 for static_files_folder in static_folders:
 
                     # skip dumping of static files of apps not located under LOCAL_ROOT path
@@ -197,7 +196,6 @@ class Command(BaseCommand):
 
                     copy_tree(static_files_folder, static_folder)
                     print("Saved Static Files from '"+static_files_folder+"'.")
-                print('+++++++++++++++ END: STATIC_DIRS +++++++++++++++')
 
                 # Store Template Folders
                 template_folders = []
@@ -212,7 +210,6 @@ class Command(BaseCommand):
                 if not os.path.exists(template_files_folders):
                     os.makedirs(template_files_folders)
 
-                print('--------------- TEMPLATE_DIRS --------------------')
                 for template_files_folder in template_folders:
 
                     # skip dumping of template files of apps not located under LOCAL_ROOT path
@@ -228,7 +225,6 @@ class Command(BaseCommand):
 
                     copy_tree(template_files_folder, template_folder)
                     print("Saved Template Files from '"+template_files_folder+"'.")
-                print('+++++++++++++++ END: TEMPLATES_DIRS +++++++++++++++')
 
                 # Store Locale Folders
                 locale_folders = settings.LOCALE_PATHS
@@ -236,7 +232,6 @@ class Command(BaseCommand):
                 if not os.path.exists(locale_files_folders):
                     os.makedirs(locale_files_folders)
 
-                print('--------------- LOCALE_DIRS --------------------')
                 for locale_files_folder in locale_folders:
 
                     # skip dumping of locale files of apps not located under LOCAL_ROOT path
@@ -252,7 +247,6 @@ class Command(BaseCommand):
 
                     copy_tree(locale_files_folder, locale_folder)
                     print("Saved Locale Files from '"+locale_files_folder+"'.")
-                print('+++++++++++++++ END: LOCALE_DIRS +++++++++++++++')
 
                 # Create Final ZIP Archive
                 backup_archive = os.path.join(backup_dir, dir_time_suffix+'.zip')
