@@ -229,7 +229,9 @@ class Command(BaseCommand):
                 if not skip_geoserver:
 
                     try:
+                        print('---- Restore Geoserver Backup ---')
                         self.restore_geoserver_backup(settings, target_folder)
+                        print('---- end: Restore Geoserver Backup ---')
                         self.restore_geoserver_raster_data(config, settings, target_folder)
                         self.restore_geoserver_vector_data(config, settings, target_folder)
                         print("Restoring geoserver external resources")
@@ -564,12 +566,18 @@ class Command(BaseCommand):
         error_backup = 'Could not successfully restore GeoServer ' + \
                        'catalog [{}rest/br/restore/]: {} - {}'
 
+        print('=========== /reset/br/restore =============')
+        print(f'response {r.status_code}: {r.text}')
+
         if r.status_code in (200, 201, 406):
             try:
                 r = requests.get(url + 'rest/br/restore.json',
                                  headers=headers,
                                  auth=HTTPBasicAuth(user, passwd),
                                  timeout=10)
+
+                print('=========== /reset/br/restore.json =============')
+                print(f'response {r.status_code}: {r.text}')
 
                 if (r.status_code == 200):
                     gs_backup = r.json()
@@ -578,6 +586,9 @@ class Command(BaseCommand):
                                      headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
+
+                    print(f'=========== {_url} =============')
+                    print(f'response {r.status_code}: {r.text}')
 
                     if (r.status_code == 200):
                         gs_backup = r.json()
@@ -593,6 +604,9 @@ class Command(BaseCommand):
                              auth=HTTPBasicAuth(user, passwd),
                              timeout=10)
 
+            print(f'=========== /reset/br/restore/{str(gs_bk_exec_id)}.json =============')
+            print(f'response {r.status_code}: {r.text}')
+
             if (r.status_code == 200):
                 gs_bk_exec_status = gs_backup['restore']['execution']['status']
                 gs_bk_exec_progress = gs_backup['restore']['execution']['progress']
@@ -604,6 +618,9 @@ class Command(BaseCommand):
                                      headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
+
+                    print(f'=========== /reset/br/restore/{str(gs_bk_exec_id)}.json =============')
+                    print(f'response {r.status_code}: {r.text}')
 
                     if (r.status_code == 200):
 

@@ -134,7 +134,9 @@ class Command(BaseCommand):
             os.chmod(target_folder, 0o777)
 
             if not skip_geoserver:
+                print('---- Create Geoserver Backup ---')
                 self.create_geoserver_backup(settings, target_folder)
+                print('---- end: Create Geoserver Backup ---')
                 self.dump_geoserver_raster_data(config, settings, target_folder)
                 self.dump_geoserver_vector_data(config, settings, target_folder)
                 print("Duming geoserver external resources")
@@ -286,23 +288,35 @@ class Command(BaseCommand):
                           headers=headers, auth=HTTPBasicAuth(user, passwd))
         error_backup = 'Could not successfully backup GeoServer ' + \
                        'catalog [{}rest/br/backup/]: {} - {}'
+
+        print('=========== /rest/br/backup =============')
+        print(f'response {r.status_code}: {r.text}')
+
         if r.status_code in (200, 201, 406):
             try:
                 r = requests.get(url + 'rest/br/backup.json',
                                  headers=headers,
                                  auth=HTTPBasicAuth(user, passwd),
                                  timeout=10)
-                if (r.status_code == 200):
+
+                print('=========== /rest/br/backup.json =============')
+                print(f'response {r.status_code}: {r.text}')
+
+                if r.status_code == 200:
                     gs_backup = r.json()
                     _url = gs_backup['backups']['backup'][len(gs_backup['backups']['backup']) - 1]['href']
                     r = requests.get(_url,
                                      headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
-                    if (r.status_code == 200):
+
+                    print(f'=========== {_url} =============')
+                    print(f'response {r.status_code}: {r.text}')
+
+                    if r.status_code == 200:
                         gs_backup = r.json()
 
-                if (r.status_code != 200):
+                if r.status_code != 200:
                     raise ValueError(error_backup.format(_url, r.status_code, r.text))
             except ValueError:
                 raise ValueError(error_backup.format(url, r.status_code, r.text))
@@ -312,7 +326,11 @@ class Command(BaseCommand):
                              headers=headers,
                              auth=HTTPBasicAuth(user, passwd),
                              timeout=10)
-            if (r.status_code == 200):
+
+            print(f'=========== /rest/br/backup/{str(gs_bk_exec_id)}.json =============')
+            print(f'response {r.status_code}: {r.text}')
+
+            if r.status_code == 200:
                 gs_bk_exec_status = gs_backup['backup']['execution']['status']
                 gs_bk_exec_progress = gs_backup['backup']['execution']['progress']
                 gs_bk_exec_progress_updated = '0/0'
@@ -323,7 +341,11 @@ class Command(BaseCommand):
                                      headers=headers,
                                      auth=HTTPBasicAuth(user, passwd),
                                      timeout=10)
-                    if (r.status_code == 200):
+
+                    print(f'=========== /rest/br/backup/{str(gs_bk_exec_id)}.json =============')
+                    print(f'response {r.status_code}: {r.text}')
+
+                    if r.status_code == 200:
 
                         try:
                             gs_backup = r.json()
