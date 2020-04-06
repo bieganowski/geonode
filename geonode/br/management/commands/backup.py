@@ -145,6 +145,8 @@ class Command(BaseCommand):
                     )
                 else:
                     print('Geoserver configuration reloaded.')
+                # make sure Geoserver's confituration reload is finished
+                time.sleep(3)
 
                 print('---- Create Geoserver Backup ---')
                 self.create_geoserver_backup(settings, target_folder)
