@@ -279,7 +279,7 @@ class Command(BaseCommand):
 
         print("Dumping 'GeoServer Catalog ["+url+"]' into '"+geoserver_bk_file+"'.")
         data = {'backup': {'archiveFile': geoserver_bk_file, 'overwrite': 'true',
-                           'options': {'option': ['BK_BEST_EFFORT=true']}}}
+                           'options': {'option': ['BK_CLEANUP_TEMP=true']}}}
         headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json'
