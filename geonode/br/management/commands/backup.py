@@ -23,6 +23,7 @@ import os
 import time
 import shutil
 import requests
+import warnings
 import re
 import six
 
@@ -134,6 +135,17 @@ class Command(BaseCommand):
             os.chmod(target_folder, 0o777)
 
             if not skip_geoserver:
+                # reload Geoserver's configuration to make sure backup is successful
+                reload_resp = requests.post(url=settings.OGC_SERVER['default']['LOCATION'] + 'rest/reload')
+                if reload_resp.status_code != 200:
+                    warnings.warn(
+                        f"Reload of the Geoserver's configuration finished with {reload_resp.status_code}. "
+                        f"Please make sure the GS backup was executed properly.",
+                        RuntimeWarning
+                    )
+                else:
+                    print('Geoserver configuration reloaded.')
+
                 print('---- Create Geoserver Backup ---')
                 self.create_geoserver_backup(settings, target_folder)
                 print('---- end: Create Geoserver Backup ---')
