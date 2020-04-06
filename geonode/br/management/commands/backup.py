@@ -359,6 +359,9 @@ class Command(BaseCommand):
                         time.sleep(3)
                     else:
                         raise ValueError(error_backup.format(url, r.status_code, r.text))
+
+                if gs_bk_exec_status == 'FAILED':
+                    raise ValueError(error_backup.format(url, r.status_code, r.text))
             else:
                 raise ValueError(error_backup.format(url, r.status_code, r.text))
 
