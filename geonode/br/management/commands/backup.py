@@ -136,17 +136,17 @@ class Command(BaseCommand):
 
             if not skip_geoserver:
                 # reload Geoserver's configuration to make sure backup is successful
-                # reload_resp = requests.post(url=settings.OGC_SERVER['default']['LOCATION'] + 'rest/reload')
-                # if reload_resp.status_code != 200:
-                #     warnings.warn(
-                #         f"Reload of the Geoserver's configuration finished with {reload_resp.status_code}. "
-                #         f"Please make sure the GS backup was executed properly.",
-                #         RuntimeWarning
-                #     )
-                # else:
-                #     print('Geoserver configuration reloaded.')
-                # # make sure Geoserver's confituration reload is finished
-                # time.sleep(3)
+                reload_resp = requests.post(url=settings.OGC_SERVER['default']['LOCATION'] + 'rest/reload')
+                if reload_resp.status_code != 200:
+                    warnings.warn(
+                        f"Reload of the Geoserver's configuration finished with {reload_resp.status_code}. "
+                        f"Please make sure the GS backup was executed properly.",
+                        RuntimeWarning
+                    )
+                else:
+                    print('Geoserver configuration reloaded.')
+                # make sure Geoserver's confituration reload is finished
+                time.sleep(3)
 
                 print('---- Create Geoserver Backup ---')
                 self.create_geoserver_backup(settings, target_folder)
