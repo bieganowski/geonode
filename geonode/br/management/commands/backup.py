@@ -135,19 +135,6 @@ class Command(BaseCommand):
             os.chmod(target_folder, 0o777)
 
             if not skip_geoserver:
-                # reload Geoserver's configuration to make sure backup is successful
-                reload_resp = requests.post(url=settings.OGC_SERVER['default']['LOCATION'] + 'rest/reload')
-                if reload_resp.status_code != 200:
-                    warnings.warn(
-                        f"Reload of the Geoserver's configuration finished with {reload_resp.status_code}. "
-                        f"Please make sure the GS backup was executed properly.",
-                        RuntimeWarning
-                    )
-                else:
-                    print('Geoserver configuration reloaded.')
-                # make sure Geoserver's confituration reload is finished
-                time.sleep(3)
-
                 print('---- Create Geoserver Backup ---')
                 self.create_geoserver_backup(settings, target_folder)
                 print('---- end: Create Geoserver Backup ---')
@@ -293,9 +280,7 @@ class Command(BaseCommand):
 
         print("Dumping 'GeoServer Catalog ["+url+"]' into '"+geoserver_bk_file+"'.")
         data = {'backup': {'archiveFile': geoserver_bk_file, 'overwrite': 'true',
-                           'options': {'option': [
-                               'BK_CLEANUP_TEMP=true', 'BK_BEST_EFFORT=true'
-                           ]}}}
+                           'options': {'option': ['BK_CLEANUP_TEMP=true']}}}
         headers = {
             'Accept': 'application/json',
             'Content-type': 'application/json'
