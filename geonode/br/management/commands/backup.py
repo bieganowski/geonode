@@ -287,7 +287,7 @@ class Command(BaseCommand):
             if (r.status_code != 200):
                 raise ValueError('Could not reload GeoServer catalog!')
 
-        self.run_geoserver_backup(url, user, passwd, geoserver_bk_file)
+        self.run_geoserver_backup(url, user, passwd, geoserver_bk_file, retries=1)
 
     def run_geoserver_backup(self, url, user, passwd, geoserver_bk_file, retries=3):
 
