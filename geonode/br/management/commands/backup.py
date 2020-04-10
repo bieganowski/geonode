@@ -89,6 +89,12 @@ class Command(BaseCommand):
             help='Skips activation of the Read Only mode in backup procedure execution.'
         )
 
+        parser.add_argument(
+            '--geoserver-backup-dir',
+            dest='geoserver_backup_dir',
+            help="Destination folder where to store the Geoserver backup archive. It must be writable and should point at BACKUP_DIR."
+                 "By default it's the same as backup-dir. Useful when working with docker versions of Geoserver with a shared volume.")
+
     def handle(self, **options):
         skip_read_only = options.get('skip_read_only')
         config = Configuration.load()
@@ -114,6 +120,7 @@ class Command(BaseCommand):
         force_exec = options.get('force_exec')
         backup_dir = options.get('backup_dir')
         skip_geoserver = options.get('skip_geoserver')
+        geoserver_backup_dir = options.get('geoserver_backup_dir')
 
         if not backup_dir or len(backup_dir) == 0:
             raise CommandError("Destination folder '--backup-dir' is mandatory")
@@ -128,13 +135,14 @@ class Command(BaseCommand):
             # Create Target Folder
             dir_time_suffix = get_dir_time_suffix()
             target_folder = os.path.join(backup_dir, dir_time_suffix)
+            geoserver_target_folder = os.path.join(geoserver_backup_dir, dir_time_suffix)
             if not os.path.exists(target_folder):
                 os.makedirs(target_folder)
             # Temporary folder to store backup files. It will be deleted at the end.
             os.chmod(target_folder, 0o777)
 
             if not skip_geoserver:
-                self.create_geoserver_backup(settings, target_folder)
+                self.create_geoserver_backup(settings, geoserver_target_folder)
                 self.dump_geoserver_raster_data(config, settings, target_folder)
                 self.dump_geoserver_vector_data(config, settings, target_folder)
                 print("Duming geoserver external resources")

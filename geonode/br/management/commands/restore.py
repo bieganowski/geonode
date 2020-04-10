@@ -563,10 +563,10 @@ class Command(BaseCommand):
         passwd = settings.OGC_SERVER['default']['PASSWORD']
         geoserver_bk_file = os.path.join(target_folder, 'geoserver_catalog.zip')
 
-        if not os.path.exists(geoserver_bk_file):
-            print(('Skipping geoserver restore: ' +
-                  'file "{}" not found.'.format(geoserver_bk_file)))
-            return
+        # if not os.path.exists(geoserver_bk_file):
+        #     print(('Skipping geoserver restore: ' +
+        #           'file "{}" not found.'.format(geoserver_bk_file)))
+        #     return
 
         print "Restoring 'GeoServer Catalog ["+url+"]' from '"+geoserver_bk_file+"'."
 
@@ -646,10 +646,10 @@ class Command(BaseCommand):
             if (config.gs_dump_raster_data):
 
                 gs_data_folder = os.path.join(target_folder, 'gs_data_dir', 'geonode')
-                if not os.path.exists(gs_data_folder):
-                    print(('Skipping geoserver raster data restore: ' +
-                          'directory "{}" not found.'.format(gs_data_folder)))
-                    return
+                # if not os.path.exists(gs_data_folder):
+                #     print(('Skipping geoserver raster data restore: ' +
+                #           'directory "{}" not found.'.format(gs_data_folder)))
+                #     return
 
                 # Restore '$config.gs_data_dir/data/geonode'
                 gs_data_root = os.path.join(config.gs_data_dir, 'geonode')
@@ -669,8 +669,8 @@ class Command(BaseCommand):
                 except Exception:
                     pass
 
-                if not os.path.exists(gs_data_root):
-                    os.makedirs(gs_data_root)
+                # if not os.path.exists(gs_data_root):
+                #     os.makedirs(gs_data_root)
 
                 copy_tree(gs_data_folder, gs_data_root)
                 chmod_tree(gs_data_root)
@@ -687,18 +687,18 @@ class Command(BaseCommand):
                 except Exception:
                     pass
 
-                if not os.path.exists(gwc_layers_root):
-                    os.makedirs(gwc_layers_root)
+                # if not os.path.exists(gwc_layers_root):
+                #     os.makedirs(gwc_layers_root)
 
     def restore_geoserver_vector_data(self, config, settings, target_folder):
         """Restore Vectorial Data from DB"""
         if (config.gs_dump_vector_data):
 
             gs_data_folder = os.path.join(target_folder, 'gs_data_dir', 'geonode')
-            if not os.path.exists(gs_data_folder):
-                print(('Skipping geoserver vector data restore: ' +
-                      'directory "{}" not found.'.format(gs_data_folder)))
-                return
+            # if not os.path.exists(gs_data_folder):
+            #     print(('Skipping geoserver vector data restore: ' +
+            #           'directory "{}" not found.'.format(gs_data_folder)))
+            #     return
 
             datastore = settings.OGC_SERVER['default']['DATASTORE']
             if (datastore):
